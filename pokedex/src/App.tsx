@@ -33,7 +33,6 @@ class App extends Component<AppProps, AppState> {
     this.setState({ search: event.target.value });
   };
   onFilter = (event: { target: { value: any } }, field: string) => {
-    console.log(event.target.value);
     var value = event.target.value;
     if (field === "type") {
       this.setState((prevState) => ({
@@ -42,16 +41,6 @@ class App extends Component<AppProps, AppState> {
           : prevState.filterTypeSearch,
       }));
       console.log(this.state.filterTypeSearch);
-      //   var newList: string[] = [];
-      //   if (!this.state.filterTypeSearch.includes(event.target.value)) {
-      //     newList = this.state.filterTypeSearch.concat(event.target.value);
-      //   } else {
-      //     newList = this.state.filterTypeSearch.splice(
-      //       this.state.filterTypeSearch.indexOf(event.target.value, 0),
-      //       1
-      //     );
-      //   }
-      //   this.setState({ filterTypeSearch: newList });
     }
   };
   componentDidMount = () => {
@@ -136,6 +125,7 @@ class App extends Component<AppProps, AppState> {
           </Flex>
         </div>
         <div className="body">
+          {/* Filter section */}
           <div className="panel">
             <Flex
               className="panelItem"
