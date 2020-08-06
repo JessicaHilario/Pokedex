@@ -24,14 +24,18 @@ body {
 }
 
 .panel {
-  width: 130px;
-  position: fixed;
+  width: 25rem;
+  position: absolute;
   z-index: 1;
-  top: 5rem;
+  top: 6rem;
   right: 15px;
   background: #eee;
-  overflow-x: hidden;
   padding: 8px 0;
+}
+
+.panelItem {
+  width: 10rem;
+  margin: 5% 0 auto 0;
 }
 
 .cardDisplay {

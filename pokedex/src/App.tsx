@@ -6,20 +6,16 @@ import {
   Header,
   Text,
   Image,
-  Dropdown,
   Label,
-  Checkbox,
-  FlexItem,
 } from "@fluentui/react-northstar";
 import "./App.css";
 import Axios from "axios";
 import { type, weaknesses } from "./utils/filterable.util";
-import { MultipleSelection } from "./components/UI/MultipleSelection";
 
 class App extends Component<AppProps, AppState> {
   constructor(props: Readonly<AppProps>) {
     super(props);
-    this.state = { pokeData: [], search: "" };
+    this.state = { pokeData: [], search: "", filterTypeSearch: [] };
   }
 
   getPokemon = () => {
@@ -36,19 +32,36 @@ class App extends Component<AppProps, AppState> {
   onSearch = (event: { target: { value: any } }) => {
     this.setState({ search: event.target.value });
   };
+  onFilter = (event: { target: { value: any } }, field: string) => {
+    console.log(event.target.value);
+    var value = event.target.value;
+    if (field === "type") {
+      this.setState((prevState) => ({
+        filterTypeSearch: !prevState.filterTypeSearch.includes(value)
+          ? prevState.filterTypeSearch.concat(value)
+          : prevState.filterTypeSearch,
+      }));
+      console.log(this.state.filterTypeSearch);
+      //   var newList: string[] = [];
+      //   if (!this.state.filterTypeSearch.includes(event.target.value)) {
+      //     newList = this.state.filterTypeSearch.concat(event.target.value);
+      //   } else {
+      //     newList = this.state.filterTypeSearch.splice(
+      //       this.state.filterTypeSearch.indexOf(event.target.value, 0),
+      //       1
+      //     );
+      //   }
+      //   this.setState({ filterTypeSearch: newList });
+    }
+  };
   componentDidMount = () => {
     this.getPokemon();
-    console.log();
   };
 
   searchOnName = () => {
     return this.state.pokeData.filter((poke) =>
       poke.name.toLowerCase().includes(this.state.search.toLowerCase())
     );
-  };
-  getA11ySelectionMessage = {
-    onAdd: (item: any) => `${item} has been selected.`,
-    onRemove: (item: any) => `${item} has been removed.`,
   };
 
   render() {
@@ -123,15 +136,47 @@ class App extends Component<AppProps, AppState> {
           </Flex>
         </div>
         <div className="body">
-          <Flex className="panel">
-            <Label>Filter by Type</Label>
-            <Flex>
-              {type.map((t) => {
-                return <Checkbox id={t} label={t} labelPosition="start" />;
-              })}
+          <div className="panel">
+            <Flex
+              className="panelItem"
+              style={{ float: "left", marginLeft: "5%" }}
+            >
+              <Label>Filter by Type</Label>
               <br />
+              {type.map((t) => {
+                return (
+                  <label style={{ display: "block" }}>
+                    <input
+                      type="checkbox"
+                      name="type[]"
+                      value={t}
+                      onChange={(event: any) => this.onFilter(event, "type")}
+                    />{" "}
+                    {t}
+                  </label>
+                );
+              })}
             </Flex>
-          </Flex>
+            <Flex className="panelItem" style={{ float: "right" }}>
+              <Label>Filter by Weaknesses</Label>
+              <br />
+              {weaknesses.map((w) => {
+                return (
+                  <label style={{ display: "block" }}>
+                    <input
+                      type="checkbox"
+                      name="weaknesses[]"
+                      value={w}
+                      onChange={(event: any) =>
+                        this.onFilter(event, "weakness")
+                      }
+                    />
+                    {w}
+                  </label>
+                );
+              })}
+            </Flex>
+          </div>
 
           <Flex column gap="gap.large" className="cardDisplay">
             {/* Display cards either by search or no search */}
@@ -148,6 +193,7 @@ interface AppProps {}
 interface AppState {
   pokeData: any[];
   search: string;
+  filterTypeSearch: string[];
 }
 
 export default App;
